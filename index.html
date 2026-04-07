@@ -715,9 +715,9 @@
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload)
-      }).catch(() => {}); // text/plain é simple request — passa pelo no-cors sem preflight
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(payload)
+      }).catch(() => {});
 
       // Mostra resultado imediatamente (optimistic UI)
       mostrarResultado(nome, email, categoria);
