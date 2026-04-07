@@ -715,9 +715,9 @@
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(payload)
-      }).catch(() => {}); // ignora erro de CORS no cliente — o servidor ainda processa
+      }).catch(() => {}); // text/plain é simple request — passa pelo no-cors sem preflight
 
       // Mostra resultado imediatamente (optimistic UI)
       mostrarResultado(nome, email, categoria);
