@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico de Presença de Valor™ | Taissa Cruz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --marrom: #3E2319;
+      --marrom-medio: #6B3D28;
+      --bege: #C9A882;
+      --dourado: #C8982A;
+      --dourado-claro: #E8C547;
+      --fundo: #F8F1E7;
+      --fundo-card: #FFFFFF;
+      --texto: #1C1C1C;
+      --texto-suave: #6B5B4E;
+      --rosa: #C4715A;
+      --borda: #E8DAC8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--fundo);
+      color: var(--texto);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .topo {
+      width: 100%;
+      padding: 20px 24px;
+      text-align: center;
+      border-bottom: 1px solid var(--borda);
+      background: var(--fundo-card);
+    }
+
+    .topo-nome {
+      font-family: 'Noto Serif Display', serif;
+      font-size: 14px;
+      color: var(--marrom);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 580px;
+      padding: 40px 24px 60px;
+    }
+
+    /* ---- TELAS ---- */
+    .tela { display: none; }
+    .tela.ativa { display: block; }
+
+    /* INTRO */
+    .intro-badge {
+      display: inline-block;
+      background: var(--dourado);
+      color: var(--marrom);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .intro-titulo {
+      font-family: 'Noto Serif Display', serif;
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 600;
+      color: var(--marrom);
+      line-height: 1.25;
+      margin-bottom: 20px;
+    }
+
+    .intro-titulo em {
+      font-style: italic;
+      color: var(--marrom-medio);
+    }
+
+    .intro-subtitulo {
+      font-size: 16px;
+      color: var(--texto-suave);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .intro-detalhe {
+      font-size: 13px;
+      color: var(--bege);
+      margin-bottom: 36px;
+    }
+
+    .btn-principal {
+      display: block;
+      width: 100%;
+      background: var(--marrom);
+      color: #FFF;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 18px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.01em;
+    }
+    .btn-principal:hover { background: var(--marrom-medio); }
+    .btn-principal:active { transform: scale(0.98); }
+
+    .intro-assinatura {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--borda);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .intro-assinatura-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--bege);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif Display', serif;
+      font-size: 20px;
+      color: var(--marrom);
+      flex-shrink: 0;
+    }
+
+    .intro-assinatura-texto {
+      font-size: 13px;
+      color: var(--texto-suave);
+      line-height: 1.5;
+    }
+
+    .intro-assinatura-nome {
+      font-weight: 600;
+      color: var(--marrom);
+      font-size: 14px;
+    }
+
+    /* PROGRESSO */
+    .progresso-barra {
+      width: 100%;
+      height: 3px;
+      background: var(--borda);
+      border-radius: 2px;
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+    .progresso-fill {
+      height: 100%;
+      background: var(--dourado);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .progresso-label {
+      font-size: 12px;
+      color: var(--bege);
+      text-align: right;
+      margin-top: -28px;
+      margin-bottom: 32px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    /* PERGUNTA */
+    .pergunta-numero {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dourado);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+    }
+
+    .pergunta-texto {
+      font-family: 'Noto Serif Display', serif;
+      font-size: clamp(18px, 4vw, 22px);
+      color: var(--marrom);
+      line-height: 1.4;
+      margin-bottom: 32px;
+    }
+
+    .opcoes { display: flex; flex-direction: column; gap: 12px; }
+
+    .opcao {
+      background: var(--fundo-card);
+      border: 1.5px solid var(--borda);
+      border-radius: 10px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .opcao:hover {
+      border-color: var(--dourado);
+      background: #FFFBF4;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(62, 35, 25, 0.08);
+    }
+
+    .opcao-letra {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--fundo);
+      border: 1.5px solid var(--borda);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--marrom-medio);
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .opcao:hover .opcao-letra {
+      background: var(--dourado);
+      border-color: var(--dourado);
+      color: #FFF;
+    }
+
+    .opcao-texto {
+      font-size: 15px;
+      color: var(--texto);
+      line-height: 1.5;
+    }
+
+    /* CAPTURA */
+    .captura-titulo {
+      font-family: 'Noto Serif Display', serif;
+      font-size: clamp(22px, 4vw, 28px);
+      color: var(--marrom);
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .captura-subtitulo {
+      font-size: 15px;
+      color: var(--texto-suave);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .form-grupo {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .form-campo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--marrom);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--borda);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--texto);
+      background: var(--fundo-card);
+      transition: border-color 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus { border-color: var(--dourado); }
+    .form-input::placeholder { color: #B5A090; }
+
+    .form-privacidade {
+      font-size: 12px;
+      color: var(--bege);
+      line-height: 1.6;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* RESULTADO */
+    .resultado-icone {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+
+    .resultado-categoria {
+      display: inline-block;
+      background: var(--dourado);
+      color: var(--marrom);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+
+    .resultado-titulo {
+      font-family: 'Noto Serif Display', serif;
+      font-size: clamp(22px, 4vw, 28px);
+      color: var(--marrom);
+      line-height: 1.3;
+      margin-bottom: 16px;
+    }
+
+    .resultado-texto {
+      font-size: 15px;
+      color: var(--texto-suave);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .resultado-card {
+      background: var(--marrom);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .resultado-card-texto {
+      font-size: 14px;
+      color: var(--bege);
+      line-height: 1.7;
+    }
+
+    .resultado-card-texto strong {
+      color: var(--dourado-claro);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      display: inline-block;
+      padding: 10px 20px;
+      border: 1.5px solid var(--borda);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--marrom);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .social-link:hover {
+      border-color: var(--marrom);
+      background: var(--marrom);
+      color: #FFF;
+    }
+
+    .divisor {
+      width: 40px;
+      height: 2px;
+      background: var(--dourado);
+      margin: 32px 0;
+    }
+
+    /* LOADING */
+    .btn-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #FFF;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ERRO */
+    .erro-msg {
+      color: var(--rosa);
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+    }
+
+    @media (max-width: 400px) {
+      .container { padding: 32px 16px 60px; }
+      .opcao { padding: 14px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topo">
+    <div class="topo-nome">Taissa Cruz | Branding &amp; Business</div>
+  </div>
+
+  <div class="container">
+
+    <!-- TELA 1: INTRO -->
+    <div class="tela ativa" id="tela-intro">
+      <span class="intro-badge">Diagnóstico gratuito</span>
+      <h1 class="intro-titulo">
+        Sua presença está te<br />
+        <em>sustentando — ou sabotando?</em>
+      </h1>
+      <p class="intro-subtitulo">
+        10 perguntas para descobrir onde está o gap entre quem você é e como o mercado te enxerga — e o que isso está custando para você.
+      </p>
+      <p class="intro-detalhe">5 minutos &nbsp;·&nbsp; Análise completa no seu e-mail</p>
+      <button class="btn-principal" onclick="iniciar()">Começar diagnóstico →</button>
+
+      <div class="intro-assinatura">
+        <div class="intro-assinatura-avatar">T</div>
+        <div>
+          <div class="intro-assinatura-nome">Taissa Cruz</div>
+          <div class="intro-assinatura-texto">Brand strategist com 20+ anos de mercado.<br />Criadora do método P.V.E. e do livro <em>Imagem de Valor</em>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA 2: PERGUNTAS -->
+    <div class="tela" id="tela-perguntas">
+      <div class="progresso-barra">
+        <div class="progresso-fill" id="progresso-fill"></div>
+      </div>
+      <div class="progresso-label" id="progresso-label"></div>
+
+      <div id="pergunta-container"></div>
+    </div>
+
+    <!-- TELA 3: CAPTURA -->
+    <div class="tela" id="tela-captura">
+      <h2 class="captura-titulo">Seu diagnóstico está pronto.</h2>
+      <p class="captura-subtitulo">
+        Deixa seu e-mail para receber a análise completa — com o que seus resultados significam e os próximos passos para construir sua presença de valor.
+      </p>
+
+      <div class="form-grupo">
+        <div class="form-campo">
+          <label class="form-label" for="campo-nome">Seu nome</label>
+          <input class="form-input" type="text" id="campo-nome" placeholder="Como posso te chamar?" autocomplete="given-name" />
+        </div>
+        <div class="form-campo">
+          <label class="form-label" for="campo-whatsapp">WhatsApp</label>
+          <input class="form-input" type="tel" id="campo-whatsapp" placeholder="(11) 99999-9999" autocomplete="tel" />
+        </div>
+        <div class="form-campo">
+          <label class="form-label" for="campo-email">E-mail</label>
+          <input class="form-input" type="email" id="campo-email" placeholder="seu@email.com" autocomplete="email" />
+        </div>
+      </div>
+
+      <button class="btn-principal" id="btn-enviar" onclick="enviarFormulario()">
+        Enviar meu resultado →
+      </button>
+      <p class="erro-msg" id="erro-msg">Por favor, preencha todos os campos.</p>
+      <p class="form-privacidade">Seus dados são usados apenas para enviar seu resultado. Sem spam.</p>
+    </div>
+
+    <!-- TELA 4: OBRIGADA -->
+    <div class="tela" id="tela-obrigada">
+      <div class="resultado-icone">✦</div>
+      <span class="resultado-categoria" id="resultado-badge"></span>
+      <h2 class="resultado-titulo" id="resultado-titulo"></h2>
+      <p class="resultado-texto" id="resultado-texto"></p>
+
+      <div class="resultado-card">
+        <p class="resultado-card-texto" id="resultado-card-texto"></p>
+      </div>
+
+      <div class="divisor"></div>
+
+      <p style="font-size:14px; color: var(--texto-suave); line-height:1.7; margin-bottom: 24px;">
+        Verifique sua caixa de entrada — enviamos a análise completa com os próximos passos para <strong id="resultado-email-confirmacao"></strong>
+      </p>
+
+      <div class="social-links">
+        <a class="social-link" href="https://instagram.com/taissacruzbranding" target="_blank">Instagram</a>
+        <a class="social-link" href="https://www.tiktok.com/@taissacruzbranding" target="_blank">TikTok</a>
+        <a class="social-link" href="https://taissacruz.substack.com" target="_blank">Newsletter</a>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <script>
+    // ── CONFIGURAÇÃO ─────────────────────────────────────────────
+    // Cole aqui a URL do seu Google Apps Script após publicar
+    const APPS_SCRIPT_URL = 'COLE_SUA_URL_AQUI';
+    // ─────────────────────────────────────────────────────────────
+
+    const perguntas = [
+      {
+        texto: "Quando você fala sobre o que faz, as pessoas entendem de primeira o que você entrega — e por que você?",
+        opcoes: [
+          { letra: "A", texto: "Sim. Minha resposta é clara, gera interesse e raramente preciso repetir." },
+          { letra: "B", texto: "Às vezes. Dependendo de quem pergunta, preciso dar mais contexto." },
+          { letra: "C", texto: "Raramente. Fico me explicando e ainda assim parece que não ficou claro." }
+        ]
+      },
+      {
+        texto: "Você consegue dizer em 30 segundos o que te diferencia de outras pessoas que fazem o que você faz?",
+        opcoes: [
+          { letra: "A", texto: "Sim. Tenho clareza sobre meu diferencial e consigo comunicar isso com confiança." },
+          { letra: "B", texto: "Mais ou menos. Sei que tenho diferencial, mas na hora de falar fico um pouco vaga." },
+          { letra: "C", texto: "Não. Quando me comparo com outros na minha área, não sei bem o que me faz diferente." }
+        ]
+      },
+      {
+        texto: "Você tem clareza sobre onde quer chegar profissionalmente nos próximos 2 a 3 anos?",
+        opcoes: [
+          { letra: "A", texto: "Sim — sei o tipo de posição, projeto ou negócio que quero construir e tenho um plano." },
+          { letra: "B", texto: "Tenho uma direção geral, mas ainda estou definindo os detalhes." },
+          { letra: "C", texto: "Não tenho muita clareza — minha direção muda com frequência ou ainda não consigo visualizar." }
+        ]
+      },
+      {
+        texto: "Em reuniões, projetos ou ambientes profissionais, você sente que sua voz tem peso real?",
+        opcoes: [
+          { letra: "A", texto: "Sim. Minha opinião é buscada e minhas sugestões costumam ser levadas a sério." },
+          { letra: "B", texto: "Em alguns contextos sim, mas em outros preciso me impor mais do que gostaria." },
+          { letra: "C", texto: "Com frequência me sinto ignorada, ou preciso repetir as mesmas ideias várias vezes para ser ouvida." }
+        ]
+      },
+      {
+        texto: "Quando você propõe uma ideia ou solução no trabalho ou nos negócios, o que costuma acontecer?",
+        opcoes: [
+          { letra: "A", texto: "Costumam ser bem recebidas — tenho histórico de iniciativas que geraram resultados." },
+          { letra: "B", texto: "Às vezes funcionam, mas nem sempre consigo a adesão que preciso." },
+          { letra: "C", texto: "Raramente saem do papel — preciso de muito esforço para convencer ou acabo sendo ignorada." }
+        ]
+      },
+      {
+        texto: "Você é chamada para participar de projetos, mesas de decisão ou eventos relevantes na sua área?",
+        opcoes: [
+          { letra: "A", texto: "Com frequência — sou buscada como referência ou parceira para o que é estratégico." },
+          { letra: "B", texto: "Às vezes, mas sinto que poderia estar em mesas mais importantes." },
+          { letra: "C", texto: "Raramente ou nunca — os convites relevantes chegam para outras pessoas." }
+        ]
+      },
+      {
+        texto: "Você cobra o que acredita que seu trabalho vale — ou cede antes mesmo de negociar?",
+        opcoes: [
+          { letra: "A", texto: "Cobro o que vale. Meu preço reflete o que entrego e raramente sinto pressão para justificar." },
+          { letra: "B", texto: "Sei que poderia cobrar mais, mas ainda me sinto insegura ou encontro resistência do mercado." },
+          { letra: "C", texto: "Com frequência cedo antes de negociar. O medo de perder a oportunidade fala mais alto." }
+        ]
+      },
+      {
+        texto: "Sua presença visual — perfil online, forma de se apresentar, imagem profissional — reflete o nível que você quer ocupar?",
+        opcoes: [
+          { letra: "A", texto: "Sim. Minha imagem transmite autoridade e está alinhada com quem sou profissionalmente." },
+          { letra: "B", texto: "Razoavelmente — já investi nisso, mas sei que há inconsistências." },
+          { letra: "C", texto: "Não muito. Minha presença visual não reflete meu nível real de competência." }
+        ]
+      },
+      {
+        texto: "Pessoas fora do seu círculo de contatos próximos te reconhecem como referência na sua área?",
+        opcoes: [
+          { letra: "A", texto: "Sim — recebo oportunidades ou contatos de pessoas que me encontraram organicamente." },
+          { letra: "B", texto: "Algumas vezes, mas principalmente dentro da minha bolha de contatos já existente." },
+          { letra: "C", texto: "Raramente. Minha visibilidade está muito restrita a quem já me conhece pessoalmente." }
+        ]
+      },
+      {
+        texto: "Pessoas com menos experiência que você ocupam posições ou fecham contratos maiores — e você já se perguntou por quê?",
+        opcoes: [
+          { letra: "A", texto: "Não é algo que me afete. Tenho clareza sobre meu caminho e onde quero estar." },
+          { letra: "B", texto: "Acontece às vezes. Fico me perguntando o que elas fazem diferente." },
+          { letra: "C", texto: "Sim, com frequência. E a dúvida sobre o que estou fazendo errado aparece mais do que eu gostaria." }
+        ]
+      }
+    ];
+
+    const resultados = {
+      construcao: {
+        badge: "Autoridade em Construção",
+        titulo: "Sua base está sólida. O que falta é estratégia para transformar presença em autoridade.",
+        texto: "Você comunica o que faz com razoável clareza — e isso já é mais raro do que parece. Mas existe uma diferença real entre presença que funciona e presença que gera preferência. O mercado te vê, mas ainda não te escolhe com a frequência e o preço que você merece.",
+        card: "<strong>No e-mail que acabou de chegar:</strong> uma análise de onde estão os gaps mesmo quando a base está sólida — e o que o método P.V.E. revela sobre o próximo nível que você pode ocupar."
+      },
+      ruidos: {
+        badge: "Posicionamento com Ruídos",
+        titulo: "Você tem base — mas há ruídos que estão custando oportunidades reais.",
+        texto: "Você não é invisível. Mas há contradições entre o que você entrega e como é percebida — e esse gap tem custo real: oportunidades que vão para quem parece mais claro, negociações que você cede antes de começar, mesas em que deveria estar mas não é chamada.",
+        card: "<strong>No e-mail que acabou de chegar:</strong> o que o seu diagnóstico revela sobre onde estão esses ruídos, por que eles acontecem e os movimentos prioritários para resolvê-los com método."
+      },
+      invisivel: {
+        badge: "Invisibilidade Estratégica",
+        titulo: "Você não é invisível. Está mal posicionada — e isso tem solução.",
+        texto: "O problema não é competência — você tem. O problema é que o mercado ainda não consegue te ler com clareza suficiente para te escolher. Quando isso acontece, você negocia preço em vez de valor, se explica em vez de ser buscada, e assiste pessoas menos preparadas ocupando mesas que deveriam ser suas.",
+        card: "<strong>No e-mail que acabou de chegar:</strong> um diagnóstico honesto do que está criando essa invisibilidade, a teoria por trás do método P.V.E. e os três movimentos que mudam isso — com método, não tentativa e erro."
+      }
+    };
+
+    let respostas = [];
+    let perguntaAtual = 0;
+
+    function iniciar() {
+      mostrarTela('tela-perguntas');
+      renderPergunta();
+    }
+
+    function renderPergunta() {
+      const p = perguntas[perguntaAtual];
+      const total = perguntas.length;
+      const pct = ((perguntaAtual) / total) * 100;
+
+      document.getElementById('progresso-fill').style.width = pct + '%';
+      document.getElementById('progresso-label').textContent = (perguntaAtual + 1) + ' de ' + total;
+
+      const html = `
+        <div class="pergunta-numero">Pergunta ${perguntaAtual + 1}</div>
+        <p class="pergunta-texto">${p.texto}</p>
+        <div class="opcoes">
+          ${p.opcoes.map(o => `
+            <button class="opcao" onclick="responder('${o.letra}')">
+              <span class="opcao-letra">${o.letra}</span>
+              <span class="opcao-texto">${o.texto}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      const container = document.getElementById('pergunta-container');
+      container.style.opacity = '0';
+      container.innerHTML = html;
+      setTimeout(() => { container.style.transition = 'opacity 0.3s'; container.style.opacity = '1'; }, 20);
+    }
+
+    function responder(letra) {
+      respostas.push(letra);
+      perguntaAtual++;
+
+      if (perguntaAtual < perguntas.length) {
+        document.getElementById('progresso-fill').style.width = (perguntaAtual / perguntas.length * 100) + '%';
+        renderPergunta();
+      } else {
+        document.getElementById('progresso-fill').style.width = '100%';
+        setTimeout(() => mostrarTela('tela-captura'), 300);
+      }
+    }
+
+    function calcularCategoria() {
+      const cs = respostas.filter(r => r === 'C').length;
+      if (cs <= 3) return 'construcao';
+      if (cs <= 6) return 'ruidos';
+      return 'invisivel';
+    }
+
+    function enviarFormulario() {
+      const nome = document.getElementById('campo-nome').value.trim();
+      const whatsapp = document.getElementById('campo-whatsapp').value.trim();
+      const email = document.getElementById('campo-email').value.trim();
+      const erroEl = document.getElementById('erro-msg');
+
+      if (!nome || !email || !whatsapp) {
+        erroEl.style.display = 'block';
+        return;
+      }
+      erroEl.style.display = 'none';
+
+      const btn = document.getElementById('btn-enviar');
+      btn.innerHTML = '<div class="btn-loading"><div class="spinner"></div> Enviando...</div>';
+      btn.disabled = true;
+
+      const categoria = calcularCategoria();
+      const cs = respostas.filter(r => r === 'C').length;
+
+      const payload = {
+        nome,
+        email,
+        whatsapp,
+        respostas: respostas.join(','),
+        pontuacaoC: cs,
+        categoria
+      };
+
+      // Envia para Apps Script (no-cors: não lemos a resposta, mas o servidor processa)
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(() => {}); // ignora erro de CORS no cliente — o servidor ainda processa
+
+      // Mostra resultado imediatamente (optimistic UI)
+      mostrarResultado(nome, email, categoria);
+    }
+
+    function mostrarResultado(nome, email, categoria) {
+      const r = resultados[categoria];
+      document.getElementById('resultado-badge').textContent = r.badge;
+      document.getElementById('resultado-titulo').textContent = r.titulo;
+      document.getElementById('resultado-texto').textContent = r.texto;
+      document.getElementById('resultado-card-texto').innerHTML = r.card;
+      document.getElementById('resultado-email-confirmacao').textContent = email;
+      mostrarTela('tela-obrigada');
+    }
+
+    function mostrarTela(id) {
+      document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+      document.getElementById(id).classList.add('ativa');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>
