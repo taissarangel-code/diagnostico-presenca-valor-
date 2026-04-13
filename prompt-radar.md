@@ -1,51 +1,27 @@
-# Prompt do Agente — Radar de Conteúdo
+You are a content monitoring agent for Taissa Cruz, a Brazilian personal branding strategist. Execute the following steps completely.
 
-## Perfis monitorados
+## STEP 1 — Search for recent content
 
-### Instagram
-- rodrigobacellar_
-- purplemetrics
-- aerikalinhares
-- ilanaberenholc
-- shecorp.co
-- personalbrandinggroup
-- arthur.bender
-- danielapersonalbranding
-- bitstobrands
-- galileunogueira
-- marthaleonardis
-- amandaholzer
-- thatajunqueira_
+For each Instagram profile below, use WebSearch to search: PROFILENAME branding marca pessoal posicionamento
+Profiles: rodrigobacellar_, purplemetrics, aerikalinhares, ilanaberenholc, shecorp.co, personalbrandinggroup, arthur.bender, danielapersonalbranding, bitstobrands, galileunogueira, marthaleonardis, amandaholzer, thatajunqueira_
 
-### Sites
-- https://www.brandingmag.com/
+For brandingmag.com: use WebFetch on https://www.brandingmag.com and collect titles and URLs of recent articles.
 
-### LinkedIn
-- linkedin.com/in/marcosmalagris
-- linkedin.com/in/pcampos
-- linkedin.com/in/thiagolatorre
+For LinkedIn: use WebSearch for each name: marcosmalagris linkedin, pcampos linkedin branding, thiagolatorre linkedin
 
-## Notion — Configuração
+## STEP 2 — Select insights
 
-Token: ntn_K15293387547clcrxmKwTNPSPapwvSEMrArdyVnG4jz67j
-Database ID: 33605b27db8281569c01c3487707201b
+From all search results, select 8 to 12 of the most relevant insights published in the last 7 days. Focus on: branding, personal brand, positioning, female leadership, digital presence, strategic marketing. Write each insight title and summary in Portuguese.
 
-## Propriedades do banco (nomes EXATOS)
+## STEP 3 — Save to Notion
 
-| Campo | Nome da propriedade | Tipo | Opções válidas |
-|-------|-------------------|------|----------------|
-| Título | Título | title | — |
-| Canal | Canal/Fonte | select | Instagram, LinkedIn, Newsletter, YouTube, Site/Blog, TikTok |
-| Resumo | Resumo do Insight | rich_text | — |
-| URL | URL da Fonte | url | — |
-| Editoria | Editoria | select | Presença Estrutural, Ser Antes de Parecer, Liderança Visível, Vida que Sustenta Presença, Branding Corporativo sem Ilusão, Geral / Tendência |
-| Aproveitamento | Aproveitamento | select | 🔥 Usar agora, 📌 Referência futura, ✅ Já usado, 🗑️ Descartar |
-| Data | Data da Varredura | date | YYYY-MM-DD |
+For each insight, run this Bash curl command (replace values in UPPERCASE):
 
-## Exemplo de curl
+curl -s -X POST https://api.notion.com/v1/pages -H "Authorization: Bearer ntn_K15293387547clcrxmKwTNPSPapwvSEMrArdyVnG4jz67j" -H "Content-Type: application/json" -H "Notion-Version: 2022-06-28" -d "{\"parent\":{\"database_id\":\"33605b27db8281569c01c3487707201b\"},\"properties\":{\"T\u00edtulo\":{\"title\":[{\"text\":{\"content\":\"INSIGHT TITLE HERE\"}}]},\"Canal/Fonte\":{\"select\":{\"name\":\"CHANNEL\"}},\"Resumo do Insight\":{\"rich_text\":[{\"text\":{\"content\":\"2-3 SENTENCE SUMMARY IN PORTUGUESE\"}}]},\"URL da Fonte\":{\"url\":\"https://URL-HERE.com\"},\"Editoria\":{\"select\":{\"name\":\"CATEGORY\"}},\"Aproveitamento\":{\"select\":{\"name\":\"\ud83d\udd25 Usar agora\"}},\"Data da Varredura\":{\"date\":{\"start\":\"TODAY-DATE-YYYY-MM-DD\"}}}}"
 
-curl -s -X POST https://api.notion.com/v1/pages \
-  -H "Authorization: Bearer ntn_K15293387547clcrxmKwTNPSPapwvSEMrArdyVnG4jz67j" \
-  -H "Content-Type: application/json" \
-  -H "Notion-Version: 2022-06-28" \
-  -d '{"parent":{"database_id":"33605b27db8281569c01c3487707201b"},"properties":{"Título":{"title":[{"text":{"content":"TITULO AQUI"}}]},"Canal/Fonte":{"select":{"name":"Instagram"}},"Resumo do Insight":{"rich_text":[{"text":{"content":"RESUMO AQUI"}}]},"URL da Fonte":{"url":"https://url-aqui.com"},"Editoria":{"select":{"name":"Geral / Tendência"}},"Aproveitamento":{"select":{"name":"🔥 Usar agora"}},"Data da Varredura":{"date":{"start":"2026-04-13"}}}}'
+Valid values for CHANNEL: Instagram, LinkedIn, Site/Blog
+Valid values for CATEGORY: Presen\u00e7a Estrutural, Ser Antes de Parecer, Lideran\u00e7a Vis\u00edvel, Vida que Sustenta Presen\u00e7a, Branding Corporativo sem Ilus\u00e3o, Geral / Tend\u00eancia
+
+## STEP 4 — Print summary
+
+After saving all insights, print: total saved, sources used, and any errors.
